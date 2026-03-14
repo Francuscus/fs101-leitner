@@ -21,6 +21,9 @@ const S = {
   // Speech state per card
   spokenAnswer: '',
   inputMode: 'type', // 'type' or 'speak'
+
+  // Personal translations bank: { 'wordId': ['alt1','alt2'] }
+  myTranslations: {},
 };
 
 // ── SCREEN ROUTER ──────────────────────────────────────────────
@@ -49,6 +52,17 @@ function loginStudent() {
 
   Api.getDeck(S.studentId)
     .then(deck => {
+      // Load personal translations in parallel
+      Api.getTranslations(S.studentId)
+        .then(trans => {
+          S.myTranslations = {};
+          (trans || []).forEach(t => {
+            if (!S.myTranslations[t.wordId]) S.myTranslations[t.wordId] = [];
+            S.myTranslations[t.wordId].push(t.translation);
+          });
+        })
+        .catch(() => {}); // non-fatal
+
       if (deck && deck.length > 0) {
         S.deck = deck;
         goToDashboard();
@@ -133,7 +147,7 @@ function renderPreCard() {
 function checkPreAnswer(typed) {
   const w       = S.preWords[S.preIdx];
   const correct = S.preRound === 1 ? w.english : w.spanish;
-  const pass    = fuzzyMatch(typed, correct);
+  const pass    = fuzzyMatchWithPersonal(typed, correct, w.id);
   const fb      = document.getElementById('preFeedback');
 
   fb.textContent = pass ? '✓ Correct!' : '✗  ' + correct;
@@ -277,6 +291,7 @@ function renderRevCard() {
   document.getElementById('revFeedback').textContent = '';
   document.getElementById('revFeedback').className   = 'feedback';
   document.getElementById('revButtons').style.display = 'none';
+  document.getElementById('addTranslationRow').style.display = 'none';
   document.getElementById('intBanner').classList.remove('visible');
   document.getElementById('revInterim').textContent   = '';
   resetMicBtn('revMicBtn');
@@ -295,7 +310,7 @@ function renderRevCard() {
 function checkRevAnswer(typed) {
   const c       = S.dueCards[S.revIdx];
   const correct = c.direction === 'ES→EN' ? c.english : c.spanish;
-  const pass    = fuzzyMatch(typed, correct);
+  const pass    = fuzzyMatchWithPersonal(typed, correct, c.wordId);
   const fb      = document.getElementById('revFeedback');
   const card    = document.getElementById('revCard');
 
@@ -379,6 +394,47 @@ function finishSession() {
   }
   document.getElementById('doneResults').innerHTML = html;
   showScreen('screenDone');
+}
+
+// ── PERSONAL TRANSLATION HELPERS ──────────────────────────────
+function fuzzyMatchWithPersonal(typed, correct, wordId) {
+  if (fuzzyMatch(typed, correct)) return true;
+  const personal = S.myTranslations[wordId] || [];
+  return personal.some(alt => fuzzyMatch(typed, alt));
+}
+
+function addMyTranslation(wordId, spanish, direction) {
+  const translation = prompt(
+    'Add your own accepted translation for:
+"' + spanish + '"
+
+' +
+    'Type your preferred ' + (direction === 'ES→EN' ? 'English' : 'Spanish') + ' translation:'
+  );
+  if (!translation || !translation.trim()) return;
+
+  const trimmed = translation.trim();
+
+  // Save to local state immediately
+  if (!S.myTranslations[wordId]) S.myTranslations[wordId] = [];
+  if (!S.myTranslations[wordId].includes(trimmed)) {
+    S.myTranslations[wordId].push(trimmed);
+  }
+
+  // Save to sheet in background
+  Api.saveTranslation({
+    studentId:   S.studentId,
+    studentName: S.name,
+    wordId:      wordId,
+    spanish:     spanish,
+    translation: trimmed,
+  }).catch(e => console.warn('saveTranslation error:', e));
+
+  // Show confirmation
+  const banner = document.getElementById('intBanner');
+  banner.textContent = '✓ Translation saved: "' + trimmed + '" is now accepted for this word.';
+  banner.classList.add('visible');
+  setTimeout(() => banner.classList.remove('visible'), 3000);
 }
 
 // ── SPEECH HELPERS ─────────────────────────────────────────────
