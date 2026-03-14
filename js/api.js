@@ -3,7 +3,7 @@
 //  Uses JSONP for GET (bypasses CORS), GET params for POST data
 // ============================================================
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbzRhqEx3IceLCTznOJBm6tQefjRrugTC1N6FurbUN-0l0FViUNsmbiVUOfgFl7SpBV-7Q/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyYQpBpmb-Zgl_uPQYIaJEWrv9759I-PKIcNNccMZLz97OZRM0iNPi1Kmcwi0FYV4E0fg/exec';
 
 const Api = (() => {
 
