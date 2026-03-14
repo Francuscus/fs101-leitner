@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Leitner Box">
+  <meta name="theme-color" content="#4A235A">
+  <title>FS-101 Leitner Box</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🃏 Leitner Box</h1>
+    <p>FS-101 Spanish · Monmouth University · Prof. Cipriani</p>
+  </div>
+
+  <!-- ── SCREEN: LOADING ──────────────────────────────────── -->
+  <div class="card screen" id="screenLoading">
+    <div class="label">One moment…</div>
+    <p class="note" id="loadingMsg" style="font-size:15px;color:#4A235A;font-style:normal">Loading…</p>
+  </div>
+
+  <!-- ── SCREEN: LOGIN ────────────────────────────────────── -->
+  <div class="card screen active" id="screenLogin">
+    <div class="label">¡Bienvenido!</div>
+    <p class="note" style="margin-bottom:14px">Enter your name and class section to begin.</p>
+    <input type="text" id="inName" placeholder="Your full name" autocomplete="name">
+    <select id="inClass">
+      <option value="">— Select your class section —</option>
+      <option value="A">Class A</option>
+      <option value="B">Class B</option>
+      <option value="C">Class C</option>
+    </select>
+    <button class="btn btn-purple" onclick="loginStudent()">▶  Continue</button>
+  </div>
+
+  <!-- ── SCREEN: TIER SELECTION ───────────────────────────── -->
+  <div class="card screen" id="screenTier">
+    <div class="label">Choose Your Level of Commitment</div>
+    <p class="note">How often do you want to review? You can change this later.</p>
+    <div class="tier-cards">
+      <div class="tier-card" id="tier3card" onclick="selectTier(3)">
+        <div class="tier-num">3</div>
+        <div class="tier-name">Casual</div>
+        <div class="tier-desc">Box 1: every class<br>Box 2: weekly<br>Box 3: before exams</div>
+      </div>
+      <div class="tier-card selected" id="tier5card" onclick="selectTier(5)">
+        <div class="tier-num">5</div>
+        <div class="tier-name">Serious</div>
+        <div class="tier-desc">Box 1: every class<br>Box 2: every 3 days<br>Box 3: weekly<br>Box 4: biweekly<br>Box 5: before exams</div>
+      </div>
+    </div>
+    <button class="btn btn-purple" onclick="startPreTest()">▶  Begin Pre-Test</button>
+  </div>
+
+  <!-- ── SCREEN: PRE-TEST CARD ────────────────────────────── -->
+  <div class="card screen" id="screenPreCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="label" id="preRoundLabel">Round 1 of 2</div>
+      <div class="label" id="preCountLabel">1 / 25</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="preProgress" style="width:0%"></div>
+    </div>
+
+    <div class="flash-card" style="cursor:default">
+      <div class="dir-badge" id="preDirection">ESPAÑOL → ENGLISH</div>
+      <div class="prompt" id="prePrompt">—</div>
+      <div class="hint" id="preHint">Type or speak the translation below</div>
+    </div>
+
+    <!-- Type or Speak -->
+    <div class="btn-row" style="margin-bottom:10px">
+      <button class="btn btn-outline btn-mic" id="preMicBtn"
+        onclick="toggleMic('preAnswer','preMicBtn','preInterim', preRound1Lang())">
+        🎤  Speak
+      </button>
+      <button class="btn btn-outline" onclick="document.getElementById('preAnswer').focus()">
+        ⌨️  Type
+      </button>
+    </div>
+
+    <div class="interim-text" id="preInterim"></div>
+
+    <input type="text" class="type-input" id="preAnswer"
+      placeholder="Type your answer…"
+      onkeydown="if(event.key==='Enter') submitPreAnswer()"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+    <div class="feedback" id="preFeedback"></div>
+
+    <button class="btn btn-purple" id="preNextBtn" onclick="nextPreCard()" disabled>Next →</button>
+
+    <p class="note" style="text-align:center;margin-top:4px">
+      Press Enter or tap Next after typing · Speak button uses your microphone
+    </p>
+  </div>
+
+  <!-- ── SCREEN: PRE-TEST RESULTS ─────────────────────────── -->
+  <div class="card screen" id="screenPreResults">
+    <div class="label">Pre-Test Complete!</div>
+    <div class="score-big" id="preScoreBig">—</div>
+    <div class="score-sub" id="preScoreSub">answers correct</div>
+    <div class="box-grid" id="preBoxGrid"></div>
+    <p class="note" id="preResultNote"></p>
+    <button class="btn btn-purple" onclick="goToDashboard()">▶  See My Deck</button>
+  </div>
+
+  <!-- ── SCREEN: DASHBOARD ─────────────────────────────────── -->
+  <div class="card screen" id="screenDash">
+    <div class="dash-top">
+      <div>
+        <div class="label" id="dashName">My Deck</div>
+        <div style="font-size:12px;color:#888" id="dashSub"></div>
+      </div>
+      <div>
+        <div class="dash-due-lbl">Due today</div>
+        <div class="dash-due-num" id="dashDue">—</div>
+      </div>
+    </div>
+    <div class="box-grid" id="dashBoxGrid"></div>
+    <button class="btn btn-purple" id="reviewBtn" onclick="startReview()">
+      🃏  Review Due Cards
+    </button>
+    <button class="btn btn-grey" onclick="showScreen('screenLogin')">
+      Switch Student
+    </button>
+  </div>
+
+  <!-- ── SCREEN: REVIEW CARD ──────────────────────────────── -->
+  <div class="card screen" id="screenReview">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="label" id="revLabel">Review</div>
+      <div class="label" id="revCount">1 / ?</div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="revProgress" style="width:0%"></div>
+    </div>
+
+    <div class="flash-card" id="revCard">
+      <div class="dir-badge" id="revDirection">ES→EN</div>
+      <div class="prompt" id="revPrompt">—</div>
+      <div class="hint" id="revHint">Type or speak your answer</div>
+      <div class="answer" id="revAnswer">—</div>
+    </div>
+
+    <!-- Type or Speak -->
+    <div class="btn-row" style="margin-bottom:10px">
+      <button class="btn btn-outline btn-mic" id="revMicBtn"
+        onclick="toggleMic('revInput','revMicBtn','revInterim', revLang())">
+        🎤  Speak
+      </button>
+      <button class="btn btn-outline" onclick="document.getElementById('revInput').focus()">
+        ⌨️  Type
+      </button>
+    </div>
+
+    <div class="interim-text" id="revInterim"></div>
+
+    <input type="text" class="type-input" id="revInput"
+      placeholder="Type your answer…"
+      onkeydown="if(event.key==='Enter') checkRevAnswer(this.value.trim())"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+    <div class="feedback" id="revFeedback"></div>
+
+    <!-- Shown only after wrong answer -->
+    <div id="revButtons" style="display:none">
+      <div class="btn-row">
+        <button class="btn btn-green" onclick="submitRevResult('PASS')">✓  Got it</button>
+        <button class="btn btn-red"   onclick="submitRevResult('FAIL')">✗  Not yet</button>
+      </div>
+    </div>
+
+    <div class="int-banner" id="intBanner"></div>
+  </div>
+
+  <!-- ── SCREEN: SESSION COMPLETE ─────────────────────────── -->
+  <div class="card screen" id="screenDone">
+    <div class="label">Session Complete! 🎉</div>
+    <div class="score-big" id="doneScore">—</div>
+    <div class="score-sub" id="doneSub">cards reviewed</div>
+    <div id="doneResults" style="margin:14px 0"></div>
+    <button class="btn btn-purple" onclick="goToDashboard()">▶  Back to My Deck</button>
+  </div>
+
+</div><!-- /wrap -->
+
+<script src="js/fuzzy.js"></script>
+<script src="js/speech.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Small helpers that need DOM context -->
+<script>
+  function preRound1Lang() {
+    return S.preRound === 1 ? 'en-US' : 'es-AR';
+  }
+  function revLang() {
+    const c = S.dueCards[S.revIdx];
+    return c && c.direction === 'ES→EN' ? 'en-US' : 'es-AR';
+  }
+</script>
+</body>
+</html>

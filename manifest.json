@@ -1,0 +1,22 @@
+{
+  "name": "FS-101 Leitner Box",
+  "short_name": "Leitner Box",
+  "description": "Spanish vocabulary spaced-repetition system for FS-101 at Monmouth University",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0a1e",
+  "theme_color": "#4A235A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/4A235A/FFFFFF?text=LB",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/4A235A/FFFFFF?text=LB",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
