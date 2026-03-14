@@ -341,3 +341,7 @@ input[type="text"]:focus, select:focus {
   .score-big { font-size: 40px; }
   .btn-row { grid-template-columns: 1fr; }
 }
+
+/* ── MY CARDS SCREEN ──────────────────────────────────────── */
+#boxTabs { overflow-x: auto; padding-bottom: 4px; }
+#myCardsList { max-height: 65vh; overflow-y: auto; }
