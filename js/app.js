@@ -404,13 +404,8 @@ function fuzzyMatchWithPersonal(typed, correct, wordId) {
 }
 
 function addMyTranslation(wordId, spanish, direction) {
-  const translation = prompt(
-    'Add your own accepted translation for:
-"' + spanish + '"
-
-' +
-    'Type your preferred ' + (direction === 'ES→EN' ? 'English' : 'Spanish') + ' translation:'
-  );
+  const langLabel = direction === 'ES→EN' ? 'English' : 'Spanish';
+  const translation = prompt('Add your own accepted translation for: "' + spanish + '" -- Type your preferred ' + langLabel + ' translation:');
   if (!translation || !translation.trim()) return;
 
   const trimmed = translation.trim();
