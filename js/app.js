@@ -137,6 +137,7 @@ function renderPreCard() {
   document.getElementById('preFeedback').className   = 'feedback';
   document.getElementById('preNextBtn').disabled     = true;
   document.getElementById('preInterim').textContent  = '';
+  document.getElementById('preAddTranslationRow').style.display = 'none';
   resetMicBtn('preMicBtn');
   S.spokenAnswer = '';
   S.inputMode    = 'type';
@@ -161,6 +162,7 @@ function checkPreAnswer(typed) {
     S.preResults[S.preIdx].typedEN  = typed;
   }
   document.getElementById('preNextBtn').disabled = false;
+  document.getElementById('preAddTranslationRow').style.display = 'block';
 }
 
 function submitPreAnswer() {
@@ -316,6 +318,7 @@ function checkRevAnswer(typed) {
 
   card.classList.add('revealed');
   card.classList.add(pass ? 'correct-flash' : 'wrong-flash');
+  document.getElementById('addTranslationRow').style.display = 'block';
 
   if (pass) {
     fb.textContent = '✓  Correct!';
@@ -397,6 +400,12 @@ function finishSession() {
 }
 
 // ── PERSONAL TRANSLATION HELPERS ──────────────────────────────
+function addMyTranslationPre() {
+  const w         = S.preWords[S.preIdx];
+  const direction = S.preRound === 1 ? 'ES→EN' : 'EN→ES';
+  addMyTranslation(w.id, w.spanish, direction);
+}
+
 function fuzzyMatchWithPersonal(typed, correct, wordId) {
   if (fuzzyMatch(typed, correct)) return true;
   const personal = S.myTranslations[wordId] || [];
