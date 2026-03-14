@@ -73,8 +73,9 @@ function startPreTest() {
 
   Api.getPreTestWords()
     .then(words => {
+      console.log('getPreTestWords returned:', words);
       if (!words || words.length === 0) {
-        alert('Could not load vocabulary. Please check your internet connection or contact Prof. Cipriani.');
+        alert('Could not load vocabulary. Server returned empty list. Please tell Prof. Cipriani to check the Apps Script execution log.');
         showScreen('screenTier');
         return;
       }
