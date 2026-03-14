@@ -61,5 +61,13 @@ const Api = (() => {
     return jsonpGet({ action: 'saveResult', payload: JSON.stringify(data) });
   }
 
-  return { getPreTestWords, getDeck, savePreTest, saveResult };
+  async function getTranslations(studentId) {
+    return jsonpGet({ action: 'getTranslations', studentId });
+  }
+
+  async function saveTranslation(data) {
+    return jsonpGet({ action: 'saveTranslation', payload: JSON.stringify(data) });
+  }
+
+  return { getPreTestWords, getDeck, savePreTest, saveResult, getTranslations, saveTranslation };
 })();
