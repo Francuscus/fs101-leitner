@@ -137,6 +137,12 @@
     <button class="btn btn-purple" id="reviewBtn" onclick="startReview()">
       🃏  Review Due Cards
     </button>
+    <button class="btn btn-outline" onclick="showMyCards()">
+      📋  See My Cards
+    </button>
+    <button class="btn btn-outline" onclick="showMyCards()">
+      📋  See My Cards
+    </button>
     <button class="btn btn-grey" onclick="showScreen('screenLogin')">
       Switch Student
     </button>
@@ -196,6 +202,32 @@
         ➕ Add my translation
       </button>
     </div>
+  </div>
+
+  <!-- ── SCREEN: MY CARDS ─────────────────────────────────── -->
+  <div class="card screen" id="screenMyCards">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="label">My Cards</div>
+      <button class="btn btn-grey" style="width:auto;padding:6px 14px;font-size:12px;margin:0"
+        onclick="goToDashboard()">← Back</button>
+    </div>
+    <p class="note" style="margin-bottom:12px">Tap any box to see your words in it.</p>
+    <div id="myCardsBody"></div>
+  </div>
+
+  <!-- ── SCREEN: MY CARDS ─────────────────────────────────── -->
+  <div class="card screen" id="screenMyCards">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="label" id="myCardsTitle">My Cards</div>
+      <button class="btn btn-outline" style="width:auto;padding:6px 14px;font-size:12px"
+        onclick="goToDashboard()">← Back</button>
+    </div>
+
+    <!-- Box filter tabs -->
+    <div id="boxTabs" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap"></div>
+
+    <!-- Card list -->
+    <div id="myCardsList"></div>
   </div>
 
   <!-- ── SCREEN: SESSION COMPLETE ─────────────────────────── -->
