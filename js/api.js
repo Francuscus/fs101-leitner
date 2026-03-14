@@ -2,7 +2,7 @@
 //  api.js — All communication with Apps Script backend
 // ============================================================
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyZJYr73CohJSl0tMyZYSUfmOkUS2vFBunY5OZXoWjmFvLEaNsc7O0qxMn1YjTRKne5/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwIbPMMcjSJKkyFc8bkfagiOStfiGmXedjpWxfhKj7oyIlXf5x_h8Tcvle8ypW4okTgPA/exec';
 
 const Api = (() => {
 
