@@ -163,6 +163,7 @@ function checkPreAnswer(typed) {
   }
   document.getElementById('preNextBtn').disabled = false;
   document.getElementById('preAddTranslationRow').style.display = 'block';
+  S._lastTyped = typed;
 }
 
 function submitPreAnswer() {
@@ -329,6 +330,8 @@ function checkRevAnswer(typed) {
     fb.className   = 'feedback wrong';
     document.getElementById('revButtons').style.display = 'block';
   }
+  // Store typed answer so translation button can pre-fill it
+  S._lastTyped = typed;
 }
 
 function submitRevResult(result, typed) {
@@ -403,7 +406,8 @@ function finishSession() {
 function addMyTranslationPre() {
   const w         = S.preWords[S.preIdx];
   const direction = S.preRound === 1 ? 'ES→EN' : 'EN→ES';
-  addMyTranslation(w.id, w.spanish, direction);
+  const typed     = document.getElementById('preAnswer').value.trim();
+  addMyTranslation(w.id, w.spanish, direction, typed);
 }
 
 function fuzzyMatchWithPersonal(typed, correct, wordId) {
@@ -412,11 +416,27 @@ function fuzzyMatchWithPersonal(typed, correct, wordId) {
   return personal.some(alt => fuzzyMatch(typed, alt));
 }
 
-function addMyTranslation(wordId, spanish, direction) {
+function addMyTranslation(wordId, spanish, direction, prefill) {
+  // prefill = what the student typed that was marked wrong
   const langLabel = direction === 'ES→EN' ? 'English' : 'Spanish';
-  const translation = prompt('Add your own accepted translation for: "' + spanish + '" -- Type your preferred ' + langLabel + ' translation:');
-  if (!translation || !translation.trim()) return;
+  let translation;
 
+  if (prefill && prefill.trim()) {
+    // Show their wrong answer and ask if they want to save it
+    const confirmed = confirm(
+      'Save "' + prefill.trim() + '" as an accepted ' + langLabel + ' translation for "' + spanish + '"?'
+    );
+    if (confirmed) {
+      translation = prefill.trim();
+    } else {
+      // Let them type a different one
+      translation = prompt('Type your preferred ' + langLabel + ' translation for "' + spanish + '":');
+    }
+  } else {
+    translation = prompt('Type your preferred ' + langLabel + ' translation for "' + spanish + '":');
+  }
+
+  if (!translation || !translation.trim()) return;
   const trimmed = translation.trim();
 
   // Save to local state immediately
