@@ -38,8 +38,11 @@ function showMyCards(initialBox) {
 
   document.getElementById('myCardsTitle').textContent = S.name + ' — ' + deck.length + ' cards total';
   var activeBox = parseInt(initialBox) || 0;
+  for (var j = 1; j <= 5; j++) {
+    var t = document.getElementById('boxTab' + j);
+    if (t) t.style.fontWeight = (j === activeBox) ? '800' : '600';
+  }
   renderMyCards(activeBox);
-  if (activeBox > 0) filterMyCards(activeBox);
   showScreen('screenMyCards');
 }
 

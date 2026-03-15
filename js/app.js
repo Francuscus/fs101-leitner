@@ -241,7 +241,7 @@ function goToDashboard() {
       S.deck.forEach(c => { const b = Math.min(parseInt(c.box)||1, 5); boxes[b]++; });
       let gridHtml = '';
       for (let i = 1; i <= 5; i++) {
-        gridHtml += `<div class="box-cell b${i}" role="button" tabindex="0" onclick="showMyCards(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){showMyCards(${i});event.preventDefault();}" style="cursor:pointer">
+        gridHtml += `<div class="box-cell box-cell-clickable b${i}" role="button" tabindex="0" aria-label="Open Box ${i} cards" title="Open Box ${i}" onclick="showMyCards(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){showMyCards(${i});event.preventDefault();}">
           <div class="box-num">${boxes[i]}</div>
           <div class="box-count">Box ${i}</div>
         </div>`;
