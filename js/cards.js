@@ -1,5 +1,5 @@
 // ── MY CARDS VIEW ─────────────────────────────────────────────
-function showMyCards() {
+function showMyCards(initialBox) {
   var deck = S.deck;
   if (!deck || deck.length === 0) {
     alert('No cards in your deck yet. Complete the pre-test first.');
@@ -37,7 +37,12 @@ function showMyCards() {
   window._mcText   = boxText;
 
   document.getElementById('myCardsTitle').textContent = S.name + ' — ' + deck.length + ' cards total';
-  renderMyCards(0);
+  var activeBox = parseInt(initialBox) || 0;
+  for (var j = 1; j <= 5; j++) {
+    var t = document.getElementById('boxTab' + j);
+    if (t) t.style.fontWeight = (j === activeBox) ? '800' : '600';
+  }
+  renderMyCards(activeBox);
   showScreen('screenMyCards');
 }
 

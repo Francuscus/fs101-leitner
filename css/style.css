@@ -160,17 +160,39 @@ input[type="text"]:focus, select:focus {
   transition: width 0.4s ease;
 }
 
+.dash-instruction {
+  font-size: 12px;
+  color: var(--grey-mid);
+  margin: 10px 0 4px;
+  text-align: center;
+}
+
 /* ── BOX GRID ─────────────────────────────────────────────── */
 .box-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin: 14px 0;
+  gap: 10px;
+  margin: 12px 0 16px;
 }
 .box-cell {
-  border-radius: 10px;
-  padding: 10px 6px;
+  border-radius: 12px;
+  padding: 11px 6px;
   text-align: center;
+  border: 1.5px solid transparent;
+  box-shadow: 0 1px 2px rgba(17,24,39,0.06);
+}
+.box-cell-clickable {
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+}
+.box-cell-clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(125,60,152,0.12);
+  border-color: var(--purple-border);
+}
+.box-cell-clickable:focus-visible {
+  outline: 2px solid var(--purple-dark);
+  outline-offset: 2px;
 }
 .box-num   { font-size: 18px; font-weight: 800; }
 .box-count { font-size: 11px; color: var(--grey-mid); margin-top: 2px; }
