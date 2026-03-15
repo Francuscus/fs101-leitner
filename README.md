@@ -40,6 +40,8 @@ with your actual deploy URL:
 const API_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
 ```
 
+> Tip: if you paste a `/dev` testing URL, `js/api.js` now auto-normalizes it to `/exec`. You can also override the endpoint without code changes by setting `localStorage.setItem('leitnerApiUrl', 'YOUR_URL')` in the browser console.
+
 ### Step 3 — Push to GitHub Pages
 1. Create a new GitHub repo (e.g. `fs101-leitner`)
 2. Push all files to the `main` branch
