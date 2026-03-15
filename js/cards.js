@@ -1,5 +1,5 @@
 // ── MY CARDS VIEW ─────────────────────────────────────────────
-function showMyCards() {
+function showMyCards(initialBox) {
   var deck = S.deck;
   if (!deck || deck.length === 0) {
     alert('No cards in your deck yet. Complete the pre-test first.');
@@ -37,7 +37,9 @@ function showMyCards() {
   window._mcText   = boxText;
 
   document.getElementById('myCardsTitle').textContent = S.name + ' — ' + deck.length + ' cards total';
-  renderMyCards(0);
+  var activeBox = parseInt(initialBox) || 0;
+  renderMyCards(activeBox);
+  if (activeBox > 0) filterMyCards(activeBox);
   showScreen('screenMyCards');
 }
 
