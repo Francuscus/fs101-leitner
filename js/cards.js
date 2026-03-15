@@ -20,6 +20,14 @@ function showMyCards(initialBox) {
     boxes[b].sort(function(a, c) { return a.spanish.localeCompare(c.spanish); });
   });
 
+  var boxTabsEl = document.getElementById('boxTabs');
+  var myCardsListEl = document.getElementById('myCardsList');
+  if (!boxTabsEl || !myCardsListEl) {
+    console.error('My Cards screen is missing required elements (#boxTabs, #myCardsList).');
+    alert('My Cards view is not available right now. Please refresh and try again.');
+    return;
+  }
+
   // Build tab buttons
   var tabHtml = '';
   for (var i = 1; i <= 5; i++) {
@@ -29,7 +37,7 @@ function showMyCards(initialBox) {
       ' onclick="filterMyCards(' + i + ')">' +
       'Box ' + i + ' (' + boxes[i].length + ')</button>';
   }
-  document.getElementById('boxTabs').innerHTML = tabHtml;
+  boxTabsEl.innerHTML = tabHtml;
 
   window._mcBoxes  = boxes;
   window._mcNames  = boxNames;
@@ -119,7 +127,8 @@ function renderMyCards(filterBox) {
   if (!html) {
     html = '<p class="note" style="text-align:center;padding:20px">No cards to show.</p>';
   }
-  document.getElementById('myCardsList').innerHTML = html;
+  var myCardsListEl = document.getElementById('myCardsList');
+  if (myCardsListEl) myCardsListEl.innerHTML = html;
 }
 
 // ── SESSION COMPLETE ───────────────────────────────────────────

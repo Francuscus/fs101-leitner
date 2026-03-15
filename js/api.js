@@ -3,7 +3,24 @@
 //  Uses JSONP via script tag injection (CORS-safe for Apps Script)
 // ============================================================
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyYQpBpmb-Zgl_uPQYIaJEWrv9759I-PKIcNNccMZLz97OZRM0iNPi1Kmcwi0FYV4E0fg/exec';
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbyYQpBpmb-Zgl_uPQYIaJEWrv9759I-PKIcNNccMZLz97OZRM0iNPi1Kmcwi0FYV4E0fg/exec';
+
+function normalizeDeployUrl(rawUrl) {
+  if (!rawUrl) return DEFAULT_API_URL;
+  try {
+    const parsed = new URL(String(rawUrl).trim());
+    parsed.search = '';
+    parsed.hash = '';
+    parsed.pathname = parsed.pathname.replace(/\/+$/, '').replace(/\/dev$/, '/exec');
+    return parsed.toString();
+  } catch (_) {
+    return DEFAULT_API_URL;
+  }
+}
+
+const API_URL = normalizeDeployUrl(
+  window.LEITNER_API_URL || window.localStorage.getItem('leitnerApiUrl') || DEFAULT_API_URL
+);
 
 const Api = (() => {
 
